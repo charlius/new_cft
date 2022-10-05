@@ -1,0 +1,10 @@
+requests
+bs4
+lxml
+selenium
+flask
+flask_restful
+flask_cors
+gunicorn
+gevent
+google
