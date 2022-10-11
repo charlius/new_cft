@@ -1,4 +1,4 @@
-#!/home/charlius/Documentos/webscraping/portalcft/venv/bin/python
+#!/home/charlius/Documentos/github/new_cft/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
