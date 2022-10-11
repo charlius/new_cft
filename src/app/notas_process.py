@@ -10,6 +10,7 @@ class notasProcess():
             "rut": rut,
             "password": password
         }
+        print("entro al processo")
         self.LOGIN_URL = "https://portal.cftsanagustin.cl/iniciar_sesion"
         self.URL = "https://portal.cftsanagustin.cl/concentracion_notas"
         self.client = requests.Session()
@@ -23,6 +24,7 @@ class notasProcess():
         return soup
 
     def set_sessions(self, soup):
+        print(soup)
         _token = soup.find("input", {"name":"_token"})["value"]
         self.data_form["_token"] = _token
         self.client.post(self.LOGIN_URL, data=self.data_form)

@@ -5,9 +5,14 @@ from flask_restful import Resource
 class listenerLogin(Resource):
 
     def get(self, rut, password, periodo):
-        data = notasProcess(
-            rut,
-            password
-        ).get_data(periodo)
+        try:
+            data = notasProcess(
+                rut,
+                password
+            ).get_data(periodo)
 
-        return data
+            return data
+        except Exception as ex:
+            return {
+                "error": "Verifica tu contraseña o ponte en contacto con soporte"
+            }, 404
