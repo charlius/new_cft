@@ -29,22 +29,13 @@ class notasProcess():
         self.data_form["_token"] = _token
         self.client.post(self.LOGIN_URL, data=self.data_form)
 
-    def get_notas(self, soup, periodo):
-        data_body_list = []
-        notas_list = []
-        notas = {}
-
-        #buscar tabla por año
-        div_table = soup.find('div', {"id": f"n2022-{periodo}"})
-        table =  div_table.find('table')
-
-        #obtener el encabezado de la tabla
+    def get_data_head(self, table):
         thead = table.find("thead")
         td = thead.find_all("td")
 
-        data_head = [data.text for data in td]
-
-        # obtener los datos del body, guardandolos en una lista
+        return [data.text for data in td]
+    def get_data_body(self, table):
+        data_body_list = []
         thead = table.find("tbody")
         tr_body = thead.find_all("tr")
 
@@ -53,10 +44,10 @@ class notasProcess():
             td_body = [data.text.replace("\t", "").replace("\n","") for data in td]
 
             data_body_list.append(td_body)
+        return data_body_list
 
-        # Emparejar el encabezado con el cuerpo del body
-        # en diccionarios por cada ramo
-        # guardandolos en un lista
+    def set_head_with_body_data(self, data_body_list, data_head):
+        notas_list = []
         for data in data_body_list:
 
             cont = 0
@@ -65,8 +56,20 @@ class notasProcess():
                 notas[dh] = data[cont].strip()
                 cont = cont + 1
             notas_list.append(notas)
-
         return notas_list
+
+    def get_notas(self, soup, periodo):
+
+        # Buscar tabla por semestre
+        div_table = soup.find('div', {"id": f"n2022-{periodo}"})
+        table =  div_table.find('table')
+
+        # Obtener el encabezado de la tabla
+        data_head = self.get_data_head(table)
+        # Obtener la data del body
+        data_body_list = self.get_data_body(table)
+
+        return self.set_head_with_body_data(data_body_list, data_head)
 
     def get_nombre(self, soup):
         a = soup.find("a", {"id": "userDropdown"})
